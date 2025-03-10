@@ -1,113 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="20dp"
+    android:background="#F5F5F5">
 
+    <!-- Título -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MODIFICAR DE PRODUCTOS"
+        android:text="MODIFICAR PRODUCTO"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:textSize="18dp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        />
+        android:textColor="#333333"
+        android:paddingBottom="10dp" />
 
+    <!-- Imagen -->
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:src="@drawable/adicionar"
-        android:layout_marginTop="25dp"
         android:layout_gravity="center_horizontal"
-        />
+        android:layout_marginTop="10dp"/>
 
-
+    <!-- Campos de entrada -->
     <EditText
         android:id="@+id/edtNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/redondeo"
-        android:hint="Nombre del producto"/>
+        android:layout_marginTop="20dp"
+        android:hint="Nombre del producto"
+        android:background="@drawable/rounded_input"
+        android:padding="12dp"
+        android:textSize="16sp"/>
 
     <EditText
         android:id="@+id/edtPrecio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Precio"
-        android:minHeight="48dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/redondeo"
-        android:inputType="numberDecimal"/>
+        android:background="@drawable/rounded_input"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:inputType="numberDecimal"
+        android:layout_marginTop="10dp"/>
 
     <EditText
         android:id="@+id/edtDescripcion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/redondeo"
-        android:hint="Descripcion del producto"/>
-
+        android:hint="Descripción del producto"
+        android:background="@drawable/rounded_input"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"/>
 
     <EditText
         android:id="@+id/edtStock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Stock"
-        android:minHeight="48dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/redondeo"
-        android:inputType="number"/>
+        android:background="@drawable/rounded_input"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:inputType="number"
+        android:layout_marginTop="10dp"/>
 
     <EditText
         android:id="@+id/edtUrl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/redondeo"
         android:hint="Enlace URL"
-        android:minHeight="48dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp" />
+        android:background="@drawable/rounded_input"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"/>
 
-
+    <!-- Botones de acción -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:padding="16dp">
+        android:layout_marginTop="20dp"
+        android:padding="10dp">
 
-    <Button
-        android:id="@+id/btnActualizar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Actualizar"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnActualizar"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Actualizar"
+            android:backgroundTint="#4CAF50"
+            android:textColor="#FFFFFF"
+            app:cornerRadius="10dp"
+            android:layout_marginEnd="5dp"/>
 
-    <Button
-        android:id="@+id/btnEliminar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Eliminar"
-        />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEliminar"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Eliminar"
+            android:backgroundTint="#F44336"
+            android:textColor="#FFFFFF"
+            app:cornerRadius="10dp"
+            android:layout_marginHorizontal="5dp"/>
 
-    <Button
-        android:id="@+id/btnCancelar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cancelar"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancelar"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Cancelar"
+            android:backgroundTint="#FFC107"
+            android:textColor="#FFFFFF"
+            app:cornerRadius="10dp"
+            android:layout_marginStart="5dp"/>
     </LinearLayout>
 
 </LinearLayout>

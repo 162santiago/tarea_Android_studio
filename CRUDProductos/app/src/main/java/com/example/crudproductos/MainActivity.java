@@ -5,15 +5,23 @@ import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
 import androidx.annotation.NonNull;
 
-
-
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,10 +35,31 @@ import java.io.IOException;
 import java.util.List;
 
 import com.itextpdf.text.Document;
+import com.itextpdf.text.BaseColor;
+
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.PdfWriter;
+import android.os.Build;
+import android.os.Environment;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.PdfWriter;
 
 public class MainActivity extends AppCompatActivity {
@@ -103,82 +132,144 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-
-
-
-    // Método para generar el PDF
-    private void generarPDF() {
-        // Verificar permisos si es necesario
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    1);
-            return; // No continuar si los permisos no están concedidos
+    public void generarPDF() {
+        // Verificar permisos (Solo necesario para Android 9 o menor)
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        1);
+                return;
+            }
         }
 
-        // Obtén la lista de productos de la base de datos
+        // Obtener la lista de productos
         List<Producto> productos = databaseHelper.obtenerProductos();
-        Log.d("PDF", "Cantidad de productos: " + productos.size()); // Verificar la cantidad de productos
-
         if (productos.isEmpty()) {
             Toast.makeText(this, "No hay productos en la base de datos.", Toast.LENGTH_SHORT).show();
-            return; // No generar el PDF si no hay productos
+            return;
         }
 
-        // Crea un documento PDF
-        Document document = new Document();
+        // Crear el directorio para guardar el PDF
+        File pdfDir = new File(getExternalFilesDir(null), "mis_pdfs");
+        if (!pdfDir.exists() && !pdfDir.mkdirs()) {
+            Log.e("PDF_ERROR", "No se pudo crear el directorio.");
+            return;
+        }
+
+        File pdfFile = new File(pdfDir, "productos_listado.pdf");
+        Log.d("PDF", "Ruta del archivo: " + pdfFile.getAbsolutePath());
+
+        Document document = new Document(PageSize.A4);
         try {
-            // Usar un directorio público para la prueba
-            File pdfDir = new File(Environment.getExternalStorageDirectory(), "mis_pdfs");
-            if (!pdfDir.exists()) {
-                pdfDir.mkdirs(); // Crear el directorio si no existe
-            }
-
-            File pdfFile = new File(pdfDir, "productos_listado.pdf");
-
-            // Verificar ruta del archivo
-            Log.d("PDF", "Ruta del archivo: " + pdfFile.getAbsolutePath());
-
-            // Crear el archivo PDF y escribir en él
             FileOutputStream fos = new FileOutputStream(pdfFile);
             PdfWriter.getInstance(document, fos);
             document.open();
 
-            // Agregar título al PDF
-            document.add(new Paragraph("Listado de Productos"));
-            document.add(new Paragraph("\n"));
+            // Título del PDF
+            document.add(new Paragraph("Listado de Productos\n\n"));
 
-            // Agregar los detalles de los productos al PDF
-            for (Producto producto : productos) {
-                if (producto.getNombre() != null && !producto.getNombre().isEmpty()) {
-                    String productDetails = "ID: " + producto.getId() + "\n" +
-                            "Nombre: " + producto.getNombre() + "\n" +
-                            "Precio: " + producto.getPrecio() + "\n" +
-                            "Descripción: " + producto.getDescripcion() + "\n" +
-                            "Stock: " + producto.getStock() + "\n" +
-                            "URL: " + producto.getUrl() + "\n";
-                    document.add(new Paragraph(productDetails));
-                    document.add(new Paragraph("\n"));
-                } else {
-                    Log.d("PDF", "Producto con nombre vacío o nulo: " + producto.getId());
-                }
+            // Crear la tabla con 6 columnas
+            PdfPTable table = new PdfPTable(6);
+            table.setWidthPercentage(100);
+            table.setWidths(new float[]{1.5f, 2.5f, 1.5f, 3.5f, 1.5f, 2.5f}); // Ajusta los tamaños de columna
+
+            // Color de fondo para la cabecera (azul claro #a5d8ff)
+            BaseColor headerColor = new BaseColor(165, 216, 255);
+            Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
+
+            String[] headers = {"ID", "Nombre", "Precio", "Descripción", "Stock", "Imagen"};
+            for (String header : headers) {
+                PdfPCell headerCell = new PdfPCell(new Phrase(header, headerFont));
+                headerCell.setBackgroundColor(headerColor);
+                headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                headerCell.setPadding(5);
+                table.addCell(headerCell);
             }
 
-            document.close();
-            Log.d("PDF", "Documento PDF cerrado y generado correctamente.");
+            // Descargar imágenes en un hilo separado
+            new Thread(() -> {
+                for (Producto producto : productos) {
+                    table.addCell(String.valueOf(producto.getId()));  // ID
+                    table.addCell(producto.getNombre());  // Nombre
+                    table.addCell(String.valueOf(producto.getPrecio()));  // Precio
+                    table.addCell(producto.getDescripcion());  // Descripción
+                    table.addCell(String.valueOf(producto.getStock()));  // Stock
 
-            // Mostrar un mensaje de éxito
-            Toast.makeText(this, "PDF generado exitosamente: " + pdfFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                    PdfPCell imgCell;
+                    if (producto.getUrl() != null && !producto.getUrl().isEmpty()) {
+                        Bitmap bitmap = descargarImagen(producto.getUrl());
+                        if (bitmap != null) {
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                            try {
+                                Image img = Image.getInstance(stream.toByteArray());
+                                img.scaleToFit(60, 60); // Asegura un tamaño consistente
+                                imgCell = new PdfPCell(img, true);
+                            } catch (Exception e) {
+                                Log.e("IMG_ERROR", "Error al insertar imagen en PDF: " + e.getMessage());
+                                imgCell = new PdfPCell(new Phrase("No disponible"));
+                            }
+                        } else {
+                            imgCell = new PdfPCell(new Phrase("No disponible"));
+                        }
+                    } else {
+                        imgCell = new PdfPCell(new Phrase("No disponible"));
+                    }
+                    imgCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    imgCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                    imgCell.setPadding(5);
+                    table.addCell(imgCell);
+                }
+
+                // Agregar la tabla al PDF en el hilo principal
+                runOnUiThread(() -> {
+                    try {
+                        document.add(table);
+                        document.close();
+                        Log.d("PDF", "PDF generado correctamente.");
+                        Toast.makeText(this, "PDF generado exitosamente: " + pdfFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                    } catch (DocumentException e) {
+                        Log.e("PDF_ERROR", "Error al agregar la tabla: " + e.getMessage());
+                    }
+                });
+
+            }).start();
+
         } catch (DocumentException | IOException e) {
-            e.printStackTrace();
-            // Mostrar un mensaje de error
             Log.e("PDF_ERROR", "Error al generar el PDF: " + e.getMessage());
             Toast.makeText(this, "Error al generar el PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
+
+    // Método para descargar imágenes desde una URL
+    private Bitmap descargarImagen(String urlImagen) {
+        try {
+            URL url = new URL(urlImagen);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setInstanceFollowRedirects(true);
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+            connection.setDoInput(true);
+            connection.connect();
+
+            InputStream input = connection.getInputStream();
+            Bitmap bitmap = BitmapFactory.decodeStream(input);
+            input.close();
+
+            if (bitmap == null) {
+                Log.e("IMG_ERROR", "Imagen vacía: " + urlImagen);
+            } else {
+                Log.d("IMG_SUCCESS", "Imagen descargada: " + urlImagen);
+            }
+
+            return bitmap;
+        } catch (Exception e) {
+            Log.e("IMG_ERROR", "No se pudo descargar la imagen: " + e.getMessage());
+            return null;
+        }
+    }
 
 
 }

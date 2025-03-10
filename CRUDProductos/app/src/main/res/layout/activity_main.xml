@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="Registrar"
             android:padding="10dp"
-            android:backgroundTint="@color/purple_500"
+            android:backgroundTint="#20c997"
             android:textColor="@android:color/white"
             android:layout_marginEnd="10dp" /> <!-- Espacio entre botones -->
 
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:text="Generar PDF"
             android:padding="10dp"
-            android:backgroundTint="@android:color/holo_red_dark"
+            android:backgroundTint="#fa5252"
             android:textColor="@android:color/white"
             />
     </LinearLayout>

@@ -1,89 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="35dp">
+    android:padding="25dp"
+    android:background="#F5F5F5">
 
+    <!-- Título -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="REGISTRO DE PRODUCTOS"
         android:layout_gravity="center_horizontal"
-        android:textSize="18dp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        />
+        android:textColor="#333333"
+        android:paddingBottom="10dp" />
 
+    <!-- Imagen -->
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:src="@drawable/adicionar"
-        android:layout_marginTop="25dp"
         android:layout_gravity="center_horizontal"
-        />
+        android:layout_marginTop="10dp"/>
 
+    <!-- Campos de entrada -->
     <EditText
         android:id="@+id/edtNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:minHeight="48dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:background="@drawable/redondeo"
-        android:hint="Nombre del producto"/>
+        android:layout_marginTop="20dp"
+        android:hint="Nombre del producto"
+        android:background="@drawable/rounded_input"
+        android:padding="12dp"
+        android:textSize="16sp"/>
 
     <EditText
         android:id="@+id/edtPrecio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Precio"
-        android:minHeight="48dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/redondeo"
-        android:inputType="numberDecimal"/>
+        android:background="@drawable/rounded_input"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:inputType="numberDecimal"
+        android:layout_marginTop="10dp"/>
 
     <EditText
         android:id="@+id/edtDescripcion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/redondeo"
-        android:hint="Descripcion del producto"/>
+        android:hint="Descripción del producto"
+        android:background="@drawable/rounded_input"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"/>
 
     <EditText
         android:id="@+id/edtStock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Stock"
-        android:minHeight="48dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/redondeo"
-        android:inputType="number"/>
+        android:background="@drawable/rounded_input"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:inputType="number"
+        android:layout_marginTop="10dp"/>
 
     <EditText
         android:id="@+id/edtUrl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/redondeo"
-        android:hint="Enlace URL"/>
+        android:hint="Enlace URL"
+        android:background="@drawable/rounded_input"
+        android:padding="12dp"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"/>
 
-
-    <Button
+    <!-- Botón de guardar -->
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnGuardar"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Grabar"
         android:layout_marginTop="20dp"
-        android:text="Grabar" />
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:backgroundTint="#228be6"
+        android:textColor="#FFFFFF"
+        app:cornerRadius="10dp"/>
 </LinearLayout>
