@@ -4,7 +4,6 @@ import androidx.core.content.ContextCompat;
 import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
 import androidx.annotation.NonNull;
-
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,7 +11,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,46 +19,23 @@ import android.widget.Toast;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.crudproductos.Modelo.Producto;
-
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.List;
-
 import com.itextpdf.text.Document;
 import com.itextpdf.text.BaseColor;
-
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.pdf.PdfWriter;
-import android.os.Build;
-import android.os.Environment;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
-
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.PdfWriter;
 
 public class MainActivity extends AppCompatActivity {
 
